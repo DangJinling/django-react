@@ -1,0 +1,22 @@
+node_modules
+
+### Django ###
+*.log
+*.pot
+*.pyc
+_pycache_/
+local_setting.py
+db.Sqlite3
+media
+
+*.py[cod]
+*$py.class
+
+*.so
+
+.Python
+build/
+develop-eggs/
+dist/
+.vscode
+.idea
