@@ -1,0 +1,9 @@
+1. 安装python3 ， 可参考 https://blog.csdn.net/timtian008/article/details/81186356
+2. 安装django 参考 https://blog.csdn.net/cszhaojing/article/details/79630790
+3. 从github clone 代码到本地
+4. 打开终端， 切换目录到本地代码根目录，输入 pipenv shell 
+5. cd leadmanager/
+6. python3 manage.py runserver 启动后台服务
+7， 新打开一终端， 到根目录，输入 pipenv shell 
+8. 输入 npm install 安装依赖
+9. 依赖安装完成后， 输入npm run dev  启动前台服务
