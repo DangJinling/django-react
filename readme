@@ -7,3 +7,11 @@
 7， 新打开一终端， 到根目录，输入 pipenv shell 
 8. 输入 npm install 安装依赖
 9. 依赖安装完成后， 输入npm run dev  启动前台服务
+
+生成数据库表
+cd desktop/dang/django-react/leadmanager
+python manage.py makemigrations
+python manage.py migrate
+
+生成新的module
+python manage.py startapp name

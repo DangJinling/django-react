@@ -20,3 +20,5 @@ develop-eggs/
 dist/
 .vscode
 .idea
+
+migrations/
