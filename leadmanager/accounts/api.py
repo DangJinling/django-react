@@ -2,6 +2,14 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from django.core.mail import EmailMessage, send_mail
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth.models import User
+from .tokens import account_activation_token
 
 # Register API
 
@@ -10,12 +18,37 @@ class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # user = serializer.save()
+        # return Response({
+        #     "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        #     "token": AuthToken.objects.create(user)[1]
+        # })
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.is_active = False
         user = serializer.save()
+        token = AuthToken.objects.create(user)[1]
+        current_site = get_current_site(request)
+        message = render_to_string('acc_active_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.id)),
+            'token': token,
+        })
+        # message = MIMEText('hello, send by Python...', 'plain', 'utf-8')
+        mail_subject = 'Activate your blog account.'
+        # to_email = user.get('email')
+        to_email = 'dangjinling_1012@126.com'
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        email.send()
+        # send_mail('test subject', 'test message', 'dangjinling_1012@126.com',
+        #           ['812897246@qq.com'], fail_silently=False)
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
+            "token": token
         })
 
 # Login API
@@ -44,3 +77,22 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+# Active account
+# class ActiveAPI(generics.GenericAPIView):
+#     # def post(request, uidb64, token):
+#     def get(self, request, *args, **kwargs):
+#         try:
+#             uid = force_text(urlsafe_base64_decode(request.uidb64))
+#             user = User.objects.get(pk=uid)
+#         except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+#             user = None
+#         if user is not None and account_activation_token.check_token(user, request.token):
+#             user.is_active = True
+#             user.save()
+#             # login(request, user)
+#             # return redirect('home')
+#             return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+#         else:
+#             return HttpResponse('Activation link is invalid!')
