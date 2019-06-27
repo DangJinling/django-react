@@ -15,3 +15,7 @@ python manage.py migrate
 
 生成新的module
 python manage.py startapp name
+
+	
+pip3 install djangorestframework
+pip3 install django-rest-knox

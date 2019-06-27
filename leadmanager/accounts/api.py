@@ -9,7 +9,6 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.models import User
-from .tokens import account_activation_token
 
 # Register API
 
@@ -26,10 +25,13 @@ class RegisterAPI(generics.GenericAPIView):
         #     "token": AuthToken.objects.create(user)[1]
         # })
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.is_active = False
-        user = serializer.save()
+        # serializer = self.get_serializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # serializer.is_active = False
+        register = RegisterSerializer()
+        user = register.create(validated_data=request.data)
+        user.is_active = False
+        user.save()
         token = AuthToken.objects.create(user)[1]
         current_site = get_current_site(request)
         message = render_to_string('acc_active_email.html', {
@@ -44,8 +46,6 @@ class RegisterAPI(generics.GenericAPIView):
         to_email = 'dangjinling_1012@126.com'
         email = EmailMessage(mail_subject, message, to=[to_email])
         email.send()
-        # send_mail('test subject', 'test message', 'dangjinling_1012@126.com',
-        #           ['812897246@qq.com'], fail_silently=False)
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token
@@ -80,19 +80,19 @@ class UserAPI(generics.RetrieveAPIView):
 
 
 # Active account
-# class ActiveAPI(generics.GenericAPIView):
-#     # def post(request, uidb64, token):
-#     def get(self, request, *args, **kwargs):
-#         try:
-#             uid = force_text(urlsafe_base64_decode(request.uidb64))
-#             user = User.objects.get(pk=uid)
-#         except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-#             user = None
-#         if user is not None and account_activation_token.check_token(user, request.token):
-#             user.is_active = True
-#             user.save()
-#             # login(request, user)
-#             # return redirect('home')
-#             return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-#         else:
-#             return HttpResponse('Activation link is invalid!')
+class ActiveAPI(generics.GenericAPIView):
+    # def post(request, uidb64, token):
+    def get(self, request, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(request.uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, request.token):
+            user.is_active = True
+            user.save()
+            # login(request, user)
+            # return redirect('home')
+            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        else:
+            return HttpResponse('Activation link is invalid!')
