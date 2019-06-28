@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
@@ -7,8 +8,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.models import User
+from .tokens import account_activation_token
 
 # Register API
 
@@ -34,11 +35,13 @@ class RegisterAPI(generics.GenericAPIView):
         user.save()
         token = AuthToken.objects.create(user)[1]
         current_site = get_current_site(request)
+        url = 'http://' + current_site.domain + "/activate?uidb64=" + urlsafe_base64_encode(force_bytes(user.id)) + '&token=' + token
         message = render_to_string('acc_active_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.id)),
             'token': token,
+            'url': url
         })
         # message = MIMEText('hello, send by Python...', 'plain', 'utf-8')
         mail_subject = 'Activate your blog account.'
@@ -82,6 +85,21 @@ class UserAPI(generics.RetrieveAPIView):
 # Active account
 class ActiveAPI(generics.GenericAPIView):
     # def post(request, uidb64, token):
+    def post(self, request, *args, **kwargs):
+        try:
+            uid = force_text(urlsafe_base64_decode(request.uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, request.token):
+            user.is_active = True
+            user.save()
+            # login(request, user)
+            # return redirect('home')
+            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        else:
+            return HttpResponse('Activation link is invalid!')
+
     def get(self, request, *args, **kwargs):
         try:
             uid = force_text(urlsafe_base64_decode(request.uidb64))
