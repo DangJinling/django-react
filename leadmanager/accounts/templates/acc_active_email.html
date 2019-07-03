@@ -1,16 +1,7 @@
-{#{% autoescape on %}#}
-{#Hi {{ user.username }},#}
-{#Please click on the link to confirm your registration,#}
-{#    <a href= {{ url }}>#}
-{#      Confirm Your registration#}
-{#    </a>#}
-{#http://{{ domain }}{% url 'activate' uidb64=uid token=token%}#}
-{#{% endautoescape %}#}
-{% autoescape on %}
+{% autoescape off %}
+Hi {{ user.username }},
 
-            <h3>Hi {{user.username}}:</h3>
-            <h3>Thanks for your registration.</h3>
-            <h3>Please click following link to complete your registration.</h3>
-            <a href="{{ url }}">Confirm Your registration</a>
+Please click on the link below to confirm your registration:
 
+  <p><a href="{{ url }}">Confirm Registration</a></p>
 {% endautoescape %}

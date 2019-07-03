@@ -33,7 +33,8 @@ class RegisterAPI(generics.GenericAPIView):
         user = register.create(validated_data=request.data)
         user.is_active = False
         user.save()
-        token = AuthToken.objects.create(user)[1]
+        # token = AuthToken.objects.create(user)[1]
+        token = account_activation_token.make_token(user)
         current_site = get_current_site(request)
         url = 'http://' + current_site.domain + "/activate?uidb64=" + urlsafe_base64_encode(force_bytes(user.id)) + '&token=' + token
         message = render_to_string('acc_active_email.html', {
@@ -45,14 +46,15 @@ class RegisterAPI(generics.GenericAPIView):
         })
         # message = MIMEText('hello, send by Python...', 'plain', 'utf-8')
         mail_subject = 'Activate your blog account.'
-        # to_email = user.get('email')
-        to_email = 'dangjinling_1012@126.com'
+        to_email = user.email
+        # to_email = 'dangjinling_1012@126.com'
         email = EmailMessage(mail_subject, message, to=[to_email])
         email.send()
         return Response({
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": token
         })
+
 
 # Login API
 
@@ -84,29 +86,14 @@ class UserAPI(generics.RetrieveAPIView):
 
 # Active account
 class ActiveAPI(generics.GenericAPIView):
-    # def post(request, uidb64, token):
-    def post(self, request, *args, **kwargs):
-        try:
-            uid = force_text(urlsafe_base64_decode(request.uidb64))
-            user = User.objects.get(pk=uid)
-        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        if user is not None and account_activation_token.check_token(user, request.token):
-            user.is_active = True
-            user.save()
-            # login(request, user)
-            # return redirect('home')
-            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-        else:
-            return HttpResponse('Activation link is invalid!')
 
     def get(self, request, *args, **kwargs):
         try:
-            uid = force_text(urlsafe_base64_decode(request.uidb64))
+            uid = force_text(urlsafe_base64_decode(request.query_params['uidb64']))
             user = User.objects.get(pk=uid)
         except(TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
-        if user is not None and account_activation_token.check_token(user, request.token):
+        if user is not None and account_activation_token.check_token(user, request.query_params['token']):
             user.is_active = True
             user.save()
             # login(request, user)

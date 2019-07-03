@@ -24,8 +24,13 @@ export class Alerts extends Component {
             if (error.msg.username) {
                 alert.error(`Name: ${error.msg.username.join()}`);
             }
-            if (error.msg.non_field_errors)
-                alert.error(error.msg.non_field_errors.join())
+            if (error.msg.non_field_errors) {
+                alert.error(error.msg.non_field_errors.join());
+            }
+            else {
+                alert.error('Error');
+            }
+
         }
         if (message !== prevProps.message) {
             if (message.deleteLead) {
