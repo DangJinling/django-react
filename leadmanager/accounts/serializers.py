@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
+        fields = ('id','username', 'email')
 
 # Register Serializer
 
@@ -20,16 +20,16 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'],
-                                        validated_data['email'], validated_data['password'])
-
+        user = User.objects.create_user(username=(validated_data['first_name'] + ' ' + validated_data['last_name']), email=validated_data['email'], password=validated_data['password'])
         return user
+
 
 # Login Serializer
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
     password = serializers.CharField()
 
     def validate(self, data):

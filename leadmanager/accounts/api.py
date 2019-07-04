@@ -26,9 +26,6 @@ class RegisterAPI(generics.GenericAPIView):
         #     "token": AuthToken.objects.create(user)[1]
         # })
 
-        # serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        # serializer.is_active = False
         register = RegisterSerializer()
         user = register.create(validated_data=request.data)
         user.is_active = False

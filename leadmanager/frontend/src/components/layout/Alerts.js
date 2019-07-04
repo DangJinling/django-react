@@ -21,8 +21,8 @@ export class Alerts extends Component {
             if (error.msg.message) {
                 alert.error(`Message: ${error.msg.email.join()}`);
             }
-            if (error.msg.username) {
-                alert.error(`Name: ${error.msg.username.join()}`);
+            if (error.msg.first_name) {
+                alert.error(`Name: ${error.msg.first_name.join()}`);
             }
             if (error.msg.non_field_errors) {
                 alert.error(error.msg.non_field_errors.join());

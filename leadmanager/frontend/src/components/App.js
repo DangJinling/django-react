@@ -13,6 +13,7 @@ import Register from './account/Register';
 import Login from './account/Login';
 import PrivateRoute from './common/PrivateRoute';
 import { loadUser } from '../actions/auth';
+import RegisterResult from './result/RegisterResult';
 
 
 
@@ -44,6 +45,7 @@ class App extends Component {
                                     <PrivateRoute exact path='/' component={Dashboard} />
                                     <Route exact path='/register' component={Register} />
                                     <Route exact path='/login' component={Login} />
+                                    <Route exact path='/registerResult' component={RegisterResult} />
                                 </Switch>
                             </div>
                         </Fragment>

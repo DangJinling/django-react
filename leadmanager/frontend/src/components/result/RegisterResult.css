@@ -1,0 +1,10 @@
+.center {
+    display: table;
+    width: 100%;
+}
+
+.centerText {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}

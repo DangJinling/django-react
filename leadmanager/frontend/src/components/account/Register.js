@@ -8,7 +8,8 @@ import { Redirect } from 'react-router-dom';
 
 export class Register extends Component {
     state = {
-        username: '',
+        first_name: '',
+        last_name: '',
         email: '',
         password: '',
         password2: '',
@@ -16,17 +17,19 @@ export class Register extends Component {
 
     static propTypes = {
         register: PropTypes.func.isRequired,
-        isAuthenticated: PropTypes.bool
+        isAuthenticated: PropTypes.bool,
+        isRegistration: PropTypes.bool
     }
 
     onSubmit = e => {
         e.preventDefault();
-        const { username, email, password, password2 } = this.state;
+        const { first_name, last_name, email, password, password2 } = this.state;
         if (password !== password2) {
             this.props.createMessage({ passwordNotMatch: 'Password do not match.' })
         } else {
             const newUser = {
-                username,
+                first_name,
+                last_name,
                 password,
                 email
             }
@@ -43,20 +46,33 @@ export class Register extends Component {
         if (this.props.isAuthenticated) {
             return <Redirect to='/' />
         }
-        const { username, email, password, password2 } = this.state;
+        if (this.props.isRegistration) {
+            return <Redirect to='/registerResult' />
+        }
+        const { first_name, last_name, email, password, password2 } = this.state;
         return (
             <div className='col-md-6 m-auto'>
                 <div className='card card-body mt-5'>
                     <h2 className='text-center'>Regiser</h2>
                     <form onSubmit={this.onSubmit}>
                         <div className='form-group'>
-                            <label>Username</label>
+                            <label>First Name</label>
                             <input
                                 type='text'
                                 className='form-control'
-                                name='username'
+                                name='first_name'
                                 onChange={this.onChange}
-                                value={username}
+                                value={first_name}
+                            />
+                        </div>
+                        <div className='form-group'>
+                            <label>Last Name</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                name='last_name'
+                                onChange={this.onChange}
+                                value={last_name}
                             />
                         </div>
                         <div className='form-group'>
@@ -105,7 +121,8 @@ export class Register extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    isRegistration: state.auth.isRegistration
 })
 
 export default connect(mapStateToProps, { register, createMessage })(Register)

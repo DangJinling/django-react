@@ -16,7 +16,7 @@ export class Header extends Component {
             <ul className="navbar-nav ml-auto mt-2 mt-lg-0">
                 <span className='navbar-text mr-3'>
                     <strong>
-                        {user ? `Welcome ${user.username}` : ''}
+                        {user ? `Welcome ${user.first_name} ${user.last_name}` : ''}
                     </strong>
                 </span>
                 <li className="nav-item">

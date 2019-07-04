@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom';
 
 export class Login extends Component {
     state = {
-        username: '',
+        email: '',
         password: '',
     }
 
@@ -19,7 +19,7 @@ export class Login extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        this.props.login(this.state.username, this.state.password);
+        this.props.login(this.state.email, this.state.password);
         console.log('submit');
     }
 
@@ -31,20 +31,20 @@ export class Login extends Component {
         if (this.props.isAuthenticated) {
             return <Redirect to='/' />;
         }
-        const { username, password, } = this.state;
+        const { email, password, } = this.state;
         return (
             <div className='col-md-6 m-auto'>
                 <div className='card card-body mt-5'>
                     <h2 className='text-center'>Login</h2>
                     <form onSubmit={this.onSubmit}>
                         <div className='form-group'>
-                            <label>Username</label>
+                            <label>Email</label>
                             <input
-                                type='text'
+                                type='email'
                                 className='form-control'
-                                name='username'
+                                name='email'
                                 onChange={this.onChange}
-                                value={username}
+                                value={email}
                             />
                         </div>
                         <div className='form-group'>

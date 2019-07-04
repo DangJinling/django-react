@@ -13,7 +13,8 @@ const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: null,
     isLoading: false,
-    user: null
+    user: null,
+    isRegistration: false,
 }
 
 export default function (state = initialState, action) {
@@ -38,11 +39,20 @@ export default function (state = initialState, action) {
                 isAuthenticated: true,
                 isLoading: false
             }
+        case REGISTER_SUCCESS:
+            localStorage.removeItem('token');
+            return {
+                ...state,
+                token: null,
+                user: null,
+                isAuthenticated: false,
+                isLoading: false,
+                isRegistration: true,
+            }
         case AUTH_ERROR:
         case LOGIN_FAIL:
         case LOGOUT_SUCCESS:
         case REGISTER_FAIL:
-        case REGISTER_SUCCESS:
             localStorage.removeItem('token');
             return {
                 ...state,
