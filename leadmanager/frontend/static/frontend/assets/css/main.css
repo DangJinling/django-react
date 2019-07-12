@@ -1,7 +1,7 @@
 @import url("font-awesome.min.css");
 @import url("https://fonts.googleapis.com/css?family=Muli:600");
-@import url("fonts/tiempo_bold");
-@import url("fonts/avenir");
+@import url("fonts/tiempo_bold/tiempo_bold.ttf");
+@import url("fonts/avenir/");
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,

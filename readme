@@ -20,7 +20,3 @@ python manage.py startapp name
 pip3 install djangorestframework
 pip3 install django-rest-knox
 
-  "scripts": {
-    "dev": "webpack --mode development --watch ./leadmanager/frontend/src/index.js --output ./leadmanager/frontend/static/frontend/main.js",
-    "build": "webpack --mode production ./leadmanager/frontend/src/index.js --output ./leadmanager/frontend/static/frontend/main.js"
-  },
