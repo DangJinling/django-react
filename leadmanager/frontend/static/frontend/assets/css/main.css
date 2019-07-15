@@ -3494,6 +3494,16 @@ input, select, textarea {
 		background-attachment: scroll;
 	}
 
+/* story */
+#story {
+	background-image: url("../../images/travis_af1.gif");
+}
+
+/* two */
+#two {
+	background-image: url("../../images/bape.gif");
+}
+
 /* Footer */
 
 	#footer {

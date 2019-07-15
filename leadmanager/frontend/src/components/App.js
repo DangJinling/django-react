@@ -39,7 +39,8 @@ class App extends Component {
                 <AlertProvider template={AlertTemplate} {...options}>
                     <Router>
                         <Fragment>
-                            <Alerts />
+                            <Route path="/" component={HtmlComponent} />
+                            {/* <Alerts />
                             <Header />
                             <div className="container">
                                 <Switch>
@@ -49,7 +50,7 @@ class App extends Component {
                                     <Route exact path='/login' component={Login} />
                                     <Route exact path='/registerResult' component={RegisterResult} />
                                 </Switch>
-                            </div>
+                            </div> */}
                         </Fragment>
                     </Router>
                 </AlertProvider>

@@ -2,7 +2,7 @@ module.exports = {
     module: {
         rules: [
             { test: /\.html$/, loader: 'html-loader' },
-            { test: /\.css$/, loader: ['style-loader', 'css-loader'] },
+            { test: /\.(css|scss)$/, loader: ['style-loader', 'css-loader'] },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
