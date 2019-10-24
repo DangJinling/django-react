@@ -19,3 +19,4 @@ python manage.py startapp name
 	
 pip3 install djangorestframework
 pip3 install django-rest-knox
+

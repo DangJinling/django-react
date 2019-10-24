@@ -14,6 +14,7 @@ import Login from './account/Login';
 import PrivateRoute from './common/PrivateRoute';
 import { loadUser } from '../actions/auth';
 import RegisterResult from './result/RegisterResult';
+import HtmlComponent from './the-hype-advisor-gh-pages/HtmlComponent';
 
 
 
@@ -38,16 +39,18 @@ class App extends Component {
                 <AlertProvider template={AlertTemplate} {...options}>
                     <Router>
                         <Fragment>
-                            <Alerts />
+                            <Route path="/" component={HtmlComponent} />
+                            {/* <Alerts />
                             <Header />
                             <div className="container">
                                 <Switch>
-                                    <PrivateRoute exact path='/' component={Dashboard} />
+                                    <PrivateRoute exact path='/lead' component={Dashboard} />
+                                    <Route path="/" component={HtmlComponent} />
                                     <Route exact path='/register' component={Register} />
                                     <Route exact path='/login' component={Login} />
                                     <Route exact path='/registerResult' component={RegisterResult} />
                                 </Switch>
-                            </div>
+                            </div> */}
                         </Fragment>
                     </Router>
                 </AlertProvider>

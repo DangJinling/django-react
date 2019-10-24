@@ -6,7 +6,7 @@ node_modules
 *.pyc
 _pycache_/
 local_setting.py
-db.Sqlite3
+db.sqlite3
 media
 
 *.py[cod]
